@@ -1,26 +1,190 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #faf7f2;
+  --foreground: #0d0d0d;
+  --muted: #f0ebe2;
+  --muted-foreground: #5a5a5a;
+  --card: #ffffff;
+  --card-foreground: #0d0d0d;
+  --border: #e6dfd2;
+  --input: #e6dfd2;
+  --primary: #c9a961;
+  --primary-foreground: #0d0d0d;
+  --secondary: #6b1f2a;
+  --secondary-foreground: #faf7f2;
+  --accent: #c9a961;
+  --accent-foreground: #0d0d0d;
+  --destructive: #b00020;
+  --destructive-foreground: #faf7f2;
+  --ring: #c9a961;
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: #0d0d0d;
+  --foreground: #faf7f2;
+  --muted: #1a1a1a;
+  --muted-foreground: #a3a3a3;
+  --card: #141414;
+  --card-foreground: #faf7f2;
+  --border: #2a2a2a;
+  --input: #2a2a2a;
+  --primary: #c9a961;
+  --primary-foreground: #0d0d0d;
+  --secondary: #6b1f2a;
+  --secondary-foreground: #faf7f2;
+  --accent: #c9a961;
+  --accent-foreground: #0d0d0d;
+  --destructive: #ef4444;
+  --destructive-foreground: #faf7f2;
+  --ring: #c9a961;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-ring: var(--ring);
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-playfair);
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-playfair), Georgia, serif;
+  letter-spacing: -0.02em;
+}
+
+.serif {
+  font-family: var(--font-playfair), Georgia, serif;
+}
+
+.prose-content {
+  font-size: 1.125rem;
+  line-height: 1.75;
+}
+
+.prose-content h2 {
+  font-size: 2rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.prose-content h3 {
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.prose-content p {
+  margin-bottom: 1.25rem;
+}
+
+.prose-content a {
+  color: var(--primary);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.prose-content ul,
+.prose-content ol {
+  margin-bottom: 1.25rem;
+  padding-left: 1.5rem;
+}
+
+.prose-content ul {
+  list-style: disc;
+}
+
+.prose-content ol {
+  list-style: decimal;
+}
+
+.prose-content blockquote {
+  border-left: 3px solid var(--primary);
+  padding-left: 1rem;
+  font-style: italic;
+  margin: 1.5rem 0;
+  color: var(--muted-foreground);
+}
+
+.prose-content pre {
+  background: var(--muted);
+  padding: 1rem;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.prose-content code {
+  background: var(--muted);
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+  font-family: ui-monospace, monospace;
+}
+
+.prose-content pre code {
+  background: transparent;
+  padding: 0;
+}
+
+.prose-content img {
+  border-radius: var(--radius);
+  margin: 1.5rem 0;
+}
+
+.gold-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--primary), transparent);
+  border: none;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out;
 }

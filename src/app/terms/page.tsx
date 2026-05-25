@@ -1,0 +1,39 @@
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+import type { Metadata } from "next";
+import type { Page } from "@/lib/types";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getPage();
+  return {
+    title: page?.seo_title || page?.title || "Terms",
+    description: page?.seo_description || undefined,
+  };
+}
+
+async function getPage(): Promise<Page | null> {
+  const supabase = await createSupabaseServerClient();
+  const { data } = await supabase
+    .from("pages")
+    .select("*")
+    .eq("slug", "terms")
+    .maybeSingle();
+  return data as Page | null;
+}
+
+export default async function TermsPage() {
+  const page = await getPage();
+  return (
+    <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8 sm:py-24">
+      <h1 className="serif text-5xl font-semibold mb-10">
+        {page?.title || "Terms"}
+      </h1>
+      <div className="prose-content">
+        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+          {page?.content || "_Page content not set._"}
+        </ReactMarkdown>
+      </div>
+    </article>
+  );
+}
