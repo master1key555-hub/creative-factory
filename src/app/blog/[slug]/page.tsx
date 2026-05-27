@@ -10,6 +10,8 @@ import { LikeButton } from "@/components/like-button";
 import { CommentsSection } from "@/components/comments-section";
 import { ShareButtons } from "@/components/share-buttons";
 import { PostCard } from "@/components/post-card";
+import { AnimatedWords } from "@/components/motion/animated-words";
+import { FadeUp } from "@/components/motion/fade-up";
 import type { Post, Comment } from "@/lib/types";
 import type { Metadata } from "next";
 
@@ -96,45 +98,57 @@ export default async function PostPage({ params }: Props) {
     <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8 sm:py-24">
       <header className="mb-10 text-center">
         {typed.tags.length > 0 && (
-          <p className="text-xs uppercase tracking-[0.3em] text-primary mb-4">
+          <FadeUp
+            as="div"
+            className="text-xs uppercase tracking-[0.3em] text-primary mb-4"
+          >
             {typed.tags.join(" · ")}
-          </p>
+          </FadeUp>
         )}
         <h1 className="serif text-4xl sm:text-5xl md:text-6xl font-semibold leading-tight">
-          {typed.title}
+          <AnimatedWords text={typed.title} />
         </h1>
         {typed.excerpt && (
-          <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">
+          <FadeUp
+            delay={0.3}
+            className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto"
+          >
             {typed.excerpt}
-          </p>
+          </FadeUp>
         )}
-        <div className="mt-8 flex items-center justify-center gap-3 text-sm text-muted-foreground">
+        <FadeUp
+          delay={0.45}
+          className="mt-8 flex items-center justify-center gap-3 text-sm text-muted-foreground"
+        >
           <span>{typed.author_name || "Creative Factory"}</span>
           <span aria-hidden="true">·</span>
           <span>{formatDate(typed.published_at || typed.created_at)}</span>
           <span aria-hidden="true">·</span>
           <span>{readingTime(typed.content)} min read</span>
-        </div>
+        </FadeUp>
       </header>
 
       {typed.cover_url && (
-        <div className="relative aspect-[16/9] mb-12 overflow-hidden rounded-lg bg-muted">
+        <FadeUp
+          delay={0.55}
+          className="relative aspect-[16/9] mb-12 overflow-hidden rounded-lg bg-muted"
+        >
           <Image
             src={typed.cover_url}
             alt={typed.title}
             fill
             sizes="(max-width: 768px) 100vw, 768px"
-            className="object-cover"
+            className="object-cover transition-transform duration-1000 hover:scale-[1.02]"
             priority
           />
-        </div>
+        </FadeUp>
       )}
 
-      <div className="prose-content text-foreground">
+      <FadeUp delay={0.1} className="prose-content text-foreground">
         <ReactMarkdown remarkPlugins={[remarkGfm]}>
           {typed.content}
         </ReactMarkdown>
-      </div>
+      </FadeUp>
 
       <hr className="gold-divider my-12" />
 
