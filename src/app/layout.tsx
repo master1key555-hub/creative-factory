@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { CookieBanner } from "@/components/cookie-banner";
+import { NavProgress } from "@/components/motion/nav-progress";
 import { getSiteSettings } from "@/lib/settings";
 
 const playfair = Playfair_Display({
@@ -58,6 +59,7 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
+          <NavProgress />
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />

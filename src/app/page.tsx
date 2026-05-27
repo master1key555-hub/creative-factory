@@ -2,6 +2,9 @@ import Link from "next/link";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getSiteSettings } from "@/lib/settings";
 import { PostCard } from "@/components/post-card";
+import { Hero } from "@/components/hero";
+import { FadeUp } from "@/components/motion/fade-up";
+import { Stagger, StaggerItem } from "@/components/motion/stagger";
 import type { Post } from "@/lib/types";
 
 export default async function Home() {
@@ -22,39 +25,14 @@ export default async function Home() {
 
   return (
     <div>
-      {/* Hero */}
-      <section className="relative border-b border-border">
-        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8 sm:py-28 md:py-36">
-          <p className="text-xs uppercase tracking-[0.3em] text-primary mb-6">
-            The Journal of {settings.site_name}
-          </p>
-          <h1 className="serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-semibold leading-[1.05] max-w-4xl">
-            {settings.tagline || "Where ideas become iconic."}
-          </h1>
-          <p className="mt-8 text-lg text-muted-foreground max-w-2xl leading-relaxed">
-            A studio and a publication for work that lasts. Essays on craft,
-            notes from the studio, and dispatches from the field.
-          </p>
-          <div className="mt-10 flex flex-wrap gap-4">
-            <Link
-              href="/blog"
-              className="inline-flex h-12 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
-            >
-              Read the Journal
-            </Link>
-            <Link
-              href="/about"
-              className="inline-flex h-12 items-center justify-center rounded-md border border-border px-8 text-sm font-medium hover:bg-muted transition-colors"
-            >
-              About us
-            </Link>
-          </div>
-        </div>
-      </section>
+      <Hero
+        siteName={settings.site_name}
+        tagline={settings.tagline || "Where ideas become iconic."}
+      />
 
       {/* Featured + Latest */}
       <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8 sm:py-20">
-        <div className="flex items-end justify-between mb-10">
+        <FadeUp className="flex items-end justify-between mb-10">
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-primary mb-2">
               Featured
@@ -65,14 +43,16 @@ export default async function Home() {
           </div>
           <Link
             href="/blog"
-            className="hidden sm:inline-flex text-sm font-medium hover:text-primary transition-colors"
+            className="link-underline hidden sm:inline-flex text-sm font-medium hover:text-primary transition-colors"
           >
             All essays →
           </Link>
-        </div>
+        </FadeUp>
 
         {featured ? (
-          <PostCard post={featured} variant="featured" />
+          <FadeUp delay={0.1}>
+            <PostCard post={featured} variant="featured" />
+          </FadeUp>
         ) : (
           <p className="text-muted-foreground">
             No essays yet. Check back soon.
@@ -82,7 +62,7 @@ export default async function Home() {
         {rest.length > 0 && (
           <>
             <hr className="gold-divider my-16" />
-            <div className="flex items-end justify-between mb-10">
+            <FadeUp className="flex items-end justify-between mb-10">
               <div>
                 <p className="text-xs uppercase tracking-[0.3em] text-primary mb-2">
                   Recent
@@ -91,12 +71,14 @@ export default async function Home() {
                   From the archive
                 </h2>
               </div>
-            </div>
-            <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+            </FadeUp>
+            <Stagger className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
               {rest.map((post) => (
-                <PostCard key={post.id} post={post} />
+                <StaggerItem key={post.id} className="card-lift">
+                  <PostCard post={post} />
+                </StaggerItem>
               ))}
-            </div>
+            </Stagger>
           </>
         )}
       </section>

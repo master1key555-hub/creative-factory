@@ -2,6 +2,9 @@ import Link from "next/link";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { PostCard } from "@/components/post-card";
 import { BlogSearch } from "@/components/blog-search";
+import { FadeUp } from "@/components/motion/fade-up";
+import { Stagger, StaggerItem } from "@/components/motion/stagger";
+import { AnimatedWords } from "@/components/motion/animated-words";
 import type { Post } from "@/lib/types";
 import type { Metadata } from "next";
 
@@ -61,6 +64,12 @@ export default async function BlogIndex({
     .slice(0, 10)
     .map(([t]) => t);
 
+  const heading = q
+    ? `Results for "${q}"`
+    : tag
+    ? `Tagged "${tag}"`
+    : "All essays";
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8 sm:py-24">
       <header className="mb-12">
@@ -68,7 +77,7 @@ export default async function BlogIndex({
           The Journal
         </p>
         <h1 className="serif text-5xl sm:text-6xl font-semibold">
-          {q ? `Results for "${q}"` : tag ? `Tagged "${tag}"` : "All essays"}
+          <AnimatedWords text={heading} />
         </h1>
       </header>
 
@@ -106,18 +115,22 @@ export default async function BlogIndex({
       {list.length === 0 ? (
         <p className="text-muted-foreground">No essays found.</p>
       ) : (
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+        <Stagger className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
           {list.map((post) => (
-            <PostCard key={post.id} post={post} />
+            <StaggerItem key={post.id} className="card-lift">
+              <PostCard post={post} />
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
       )}
 
       {totalPages > 1 && (
-        <nav
+        <FadeUp
+          as="div"
           className="mt-16 flex items-center justify-center gap-2"
-          aria-label="Pagination"
+          delay={0.1}
         >
+          <nav className="contents" aria-label="Pagination">
           {page > 1 && (
             <Link
               href={{
@@ -143,7 +156,8 @@ export default async function BlogIndex({
               Next →
             </Link>
           )}
-        </nav>
+          </nav>
+        </FadeUp>
       )}
     </div>
   );
