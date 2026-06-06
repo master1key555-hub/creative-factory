@@ -8,9 +8,12 @@ import { apiPlugin, storyblokInit } from "@storyblok/react/rsc";
 
 import ButtonBlock from "@/components/storyblok/button-block";
 import Columns from "@/components/storyblok/columns";
+import Feature from "@/components/storyblok/feature";
+import Grid from "@/components/storyblok/grid";
 import Hero from "@/components/storyblok/hero";
 import ImageBlock from "@/components/storyblok/image-block";
 import Page from "@/components/storyblok/page";
+import Teaser from "@/components/storyblok/teaser";
 import TextBlock from "@/components/storyblok/text-block";
 
 export const STORYBLOK_TOKEN = process.env.NEXT_PUBLIC_STORYBLOK_TOKEN;
@@ -28,7 +31,12 @@ export const getStoryblokApi = storyblokInit({
     region: STORYBLOK_REGION,
   },
   components: {
+    // Storyblok standard blueprint blocks (the space ships with these).
     page: Page,
+    teaser: Teaser,
+    grid: Grid,
+    feature: Feature,
+    // Extra reusable blocks available for richer pages.
     hero: Hero,
     text: TextBlock,
     image: ImageBlock,
