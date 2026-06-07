@@ -1,8 +1,10 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { StoryblokStory } from "@storyblok/react/rsc";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { Metadata } from "next";
 import type { Page } from "@/lib/types";
+import { getStoryblokStory } from "@/lib/storyblok-page";
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getPage();
@@ -22,7 +24,15 @@ async function getPage(): Promise<Page | null> {
   return data as Page | null;
 }
 
-export default async function TermsPage() {
+export default async function TermsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ _storyblok?: string }>;
+}) {
+  const { _storyblok } = await searchParams;
+  const story = await getStoryblokStory("terms", _storyblok !== undefined);
+  if (story) return <StoryblokStory story={story} />;
+
   const page = await getPage();
   return (
     <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8 sm:py-24">

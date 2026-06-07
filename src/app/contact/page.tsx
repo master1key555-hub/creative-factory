@@ -1,13 +1,24 @@
+import { StoryblokStory } from "@storyblok/react/rsc";
+
 import { ContactForm } from "@/components/contact-form";
 import { getSiteSettings } from "@/lib/settings";
 import { SocialLinks } from "@/components/social-links";
+import { getStoryblokStory } from "@/lib/storyblok-page";
 
 export const metadata = {
   title: "Contact",
   description: "Get in touch with Creative Factory.",
 };
 
-export default async function ContactPage() {
+export default async function ContactPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ _storyblok?: string }>;
+}) {
+  const { _storyblok } = await searchParams;
+  const story = await getStoryblokStory("contact", _storyblok !== undefined);
+  if (story) return <StoryblokStory story={story} />;
+
   const settings = await getSiteSettings();
   return (
     <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8 sm:py-24">
