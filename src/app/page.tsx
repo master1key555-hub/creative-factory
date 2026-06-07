@@ -1,10 +1,20 @@
 import Link from "next/link";
+import { StoryblokStory } from "@storyblok/react/rsc";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getSiteSettings } from "@/lib/settings";
 import { PostCard } from "@/components/post-card";
 import type { Post } from "@/lib/types";
+import { getStoryblokStory } from "@/lib/storyblok-page";
 
-export default async function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ _storyblok?: string }>;
+}) {
+  const { _storyblok } = await searchParams;
+  const story = await getStoryblokStory("home", _storyblok !== undefined);
+  if (story) return <StoryblokStory story={story} />;
+
   const supabase = await createSupabaseServerClient();
   const [{ data: posts }, settings] = await Promise.all([
     supabase
