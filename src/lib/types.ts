@@ -45,6 +45,13 @@ export interface Subscriber {
   email: string;
   confirmed: boolean;
   created_at: string;
+  name?: string | null;
+  tag?: string | null;
+  source?: string | null;
+  page_url?: string | null;
+  utm_source?: string | null;
+  utm_medium?: string | null;
+  utm_campaign?: string | null;
 }
 
 export interface ContactSubmission {

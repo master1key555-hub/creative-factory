@@ -20,6 +20,7 @@ import Page from "@/components/storyblok/page";
 import PostFeed from "@/components/storyblok/post-feed";
 import ProsePage from "@/components/storyblok/prose-page";
 import Quote from "@/components/storyblok/quote";
+import SignupForm from "@/components/storyblok/signup-form";
 import Teaser from "@/components/storyblok/teaser";
 import TextBlock from "@/components/storyblok/text-block";
 import Video from "@/components/storyblok/video";
@@ -54,6 +55,7 @@ export const getStoryblokApi = storyblokInit({
     quote: Quote,
     divider: Divider,
     video: Video,
+    signup_form: SignupForm,
     // Blocks that mirror the site's existing pages (transferred from code).
     hero_home: HeroHome,
     post_feed: PostFeed,
