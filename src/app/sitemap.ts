@@ -1,8 +1,11 @@
 import type { MetadataRoute } from "next";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { headers } from "next/headers";
-import type { ISbStoryData } from "@storyblok/react/rsc";
-import { getStoryblokApi, isStoryblokConfigured } from "@/lib/storyblok";
+import {
+  STORYBLOK_TOKEN,
+  isStoryblokConfigured,
+  storyblokCdnBase,
+} from "@/lib/storyblok-config";
 
 async function siteOrigin() {
   const h = await headers();
@@ -28,21 +31,30 @@ const RESERVED_SLUGS = new Set([
   "reset-password",
 ]);
 
+type SbStory = {
+  full_slug?: string;
+  published_at?: string;
+  content?: { noindex?: boolean };
+};
+
+// Fetches published stories straight from the Storyblok CDN. Uses a bare
+// `fetch` (not `@/lib/storyblok`) so the component registry stays out of this
+// route's bundle.
 async function storyblokUrls(origin: string): Promise<MetadataRoute.Sitemap> {
   if (!isStoryblokConfigured) return [];
   try {
-    const api = getStoryblokApi();
-    const { data } = await api.get("cdn/stories", {
-      version: "published",
-      per_page: 100,
-    });
-    const stories = (data?.stories as ISbStoryData[]) ?? [];
+    const url =
+      `${storyblokCdnBase()}/v2/cdn/stories` +
+      `?version=published&per_page=100&token=${STORYBLOK_TOKEN}`;
+    const res = await fetch(url, { next: { revalidate: 300 } });
+    if (!res.ok) return [];
+    const data = (await res.json()) as { stories?: SbStory[] };
+    const stories = data.stories ?? [];
     return stories
       .filter((s) => {
         const slug = s.full_slug;
         if (!slug || RESERVED_SLUGS.has(slug)) return false;
-        const content = s.content as { noindex?: boolean } | undefined;
-        return !content?.noindex;
+        return !s.content?.noindex;
       })
       .map((s) => ({
         url: `${origin}/${s.full_slug}`,

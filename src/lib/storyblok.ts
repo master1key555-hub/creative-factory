@@ -25,13 +25,13 @@ import Teaser from "@/components/storyblok/teaser";
 import TextBlock from "@/components/storyblok/text-block";
 import Video from "@/components/storyblok/video";
 
-export const STORYBLOK_TOKEN = process.env.NEXT_PUBLIC_STORYBLOK_TOKEN;
+import {
+  STORYBLOK_TOKEN,
+  STORYBLOK_REGION,
+  isStoryblokConfigured,
+} from "@/lib/storyblok-config";
 
-// Storyblok serves from a region-specific API host. EU is the default; spaces
-// created in the US/AP/CA regions need this set so requests hit the right host.
-const STORYBLOK_REGION = process.env.NEXT_PUBLIC_STORYBLOK_REGION ?? "eu";
-
-export const isStoryblokConfigured = Boolean(STORYBLOK_TOKEN);
+export { STORYBLOK_TOKEN, isStoryblokConfigured };
 
 export const getStoryblokApi = storyblokInit({
   accessToken: STORYBLOK_TOKEN,
