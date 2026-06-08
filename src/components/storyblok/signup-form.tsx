@@ -13,7 +13,11 @@ interface SignupFormBlok extends SbBlokData {
   email_placeholder?: string;
   button_label?: string;
   success_message?: string;
+  // `offer_tag` is the preferred name; `tag` kept for backward compatibility.
+  offer_tag?: string;
   tag?: string;
+  name_enabled?: boolean;
+  redirect_url?: string;
 }
 
 // Reads UTM params + current path so each lead records where it came from.
@@ -34,6 +38,7 @@ function captureSource() {
 
 export default function SignupForm({ blok }: { blok: SignupFormBlok }) {
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [pending, startTransition] = useTransition();
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -44,12 +49,19 @@ export default function SignupForm({ blok }: { blok: SignupFormBlok }) {
     startTransition(async () => {
       const result = await submitLead({
         email,
-        tag: blok.tag,
+        name: blok.name_enabled ? name : undefined,
+        tag: blok.offer_tag || blok.tag,
         ...captureSource(),
       });
       if (result.ok) {
+        const redirect = blok.redirect_url?.trim();
+        if (redirect) {
+          window.location.href = redirect;
+          return;
+        }
         setDone(true);
         setEmail("");
+        setName("");
       } else {
         setError(result.error);
       }
@@ -79,6 +91,17 @@ export default function SignupForm({ blok }: { blok: SignupFormBlok }) {
           onSubmit={onSubmit}
           className="mx-auto mt-6 flex max-w-md flex-col gap-2 sm:flex-row"
         >
+          {blok.name_enabled ? (
+            <Input
+              type="text"
+              placeholder="Your name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              disabled={pending}
+              className="sm:flex-1"
+              aria-label="Name"
+            />
+          ) : null}
           <Input
             type="email"
             required
