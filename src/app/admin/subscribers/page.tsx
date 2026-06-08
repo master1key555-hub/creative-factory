@@ -13,12 +13,27 @@ export default async function AdminSubscribers() {
     .order("created_at", { ascending: false });
 
   const subs = (data || []) as Subscriber[];
+  const csvCell = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`;
   const csv =
     "data:text/csv;charset=utf-8," +
     encodeURIComponent(
-      ["email,confirmed,created_at", ...subs.map(
-        (s) => `${s.email},${s.confirmed},${s.created_at}`,
-      )].join("\n"),
+      [
+        "email,tag,source,page_url,utm_source,utm_medium,utm_campaign,created_at",
+        ...subs.map((s) =>
+          [
+            s.email,
+            s.tag,
+            s.source,
+            s.page_url,
+            s.utm_source,
+            s.utm_medium,
+            s.utm_campaign,
+            s.created_at,
+          ]
+            .map(csvCell)
+            .join(","),
+        ),
+      ].join("\n"),
     );
 
   return (
@@ -45,6 +60,7 @@ export default async function AdminSubscribers() {
           <thead className="bg-muted/50 text-xs uppercase tracking-widest text-muted-foreground">
             <tr>
               <th className="text-left px-4 py-3">Email</th>
+              <th className="text-left px-4 py-3">Source</th>
               <th className="text-left px-4 py-3 w-40">Subscribed</th>
               <th className="text-right px-4 py-3 w-32">Actions</th>
             </tr>
@@ -53,7 +69,7 @@ export default async function AdminSubscribers() {
             {subs.length === 0 ? (
               <tr>
                 <td
-                  colSpan={3}
+                  colSpan={4}
                   className="px-4 py-8 text-center text-muted-foreground"
                 >
                   No subscribers yet.
@@ -66,6 +82,9 @@ export default async function AdminSubscribers() {
                   id={s.id}
                   email={s.email}
                   createdAt={formatDate(s.created_at)}
+                  source={s.source}
+                  tag={s.tag}
+                  pageUrl={s.page_url}
                 />
               ))
             )}
