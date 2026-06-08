@@ -5,13 +5,17 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { Metadata } from "next";
 import type { Page } from "@/lib/types";
 import { getStoryblokStory } from "@/lib/storyblok-page";
+import { storyblokMetadata } from "@/lib/storyblok-seo";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const page = await getPage();
-  return {
+  const [story, page] = await Promise.all([
+    getStoryblokStory("terms", false),
+    getPage(),
+  ]);
+  return storyblokMetadata(story, {
     title: page?.seo_title || page?.title || "Terms",
     description: page?.seo_description || undefined,
-  };
+  });
 }
 
 async function getPage(): Promise<Page | null> {

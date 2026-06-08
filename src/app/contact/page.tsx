@@ -1,14 +1,19 @@
+import type { Metadata } from "next";
 import { StoryblokStory } from "@storyblok/react/rsc";
 
 import { ContactForm } from "@/components/contact-form";
 import { getSiteSettings } from "@/lib/settings";
 import { SocialLinks } from "@/components/social-links";
 import { getStoryblokStory } from "@/lib/storyblok-page";
+import { storyblokMetadata } from "@/lib/storyblok-seo";
 
-export const metadata = {
-  title: "Contact",
-  description: "Get in touch with Creative Factory.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const story = await getStoryblokStory("contact", false);
+  return storyblokMetadata(story, {
+    title: "Contact",
+    description: "Get in touch with Creative Factory.",
+  });
+}
 
 export default async function ContactPage({
   searchParams,
