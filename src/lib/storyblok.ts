@@ -9,16 +9,20 @@ import { apiPlugin, storyblokInit } from "@storyblok/react/rsc";
 import ButtonBlock from "@/components/storyblok/button-block";
 import Columns from "@/components/storyblok/columns";
 import ContactSection from "@/components/storyblok/contact-section";
+import Divider from "@/components/storyblok/divider";
 import Feature from "@/components/storyblok/feature";
 import Grid from "@/components/storyblok/grid";
+import Heading from "@/components/storyblok/heading";
 import Hero from "@/components/storyblok/hero";
 import HeroHome from "@/components/storyblok/hero-home";
 import ImageBlock from "@/components/storyblok/image-block";
 import Page from "@/components/storyblok/page";
 import PostFeed from "@/components/storyblok/post-feed";
 import ProsePage from "@/components/storyblok/prose-page";
+import Quote from "@/components/storyblok/quote";
 import Teaser from "@/components/storyblok/teaser";
 import TextBlock from "@/components/storyblok/text-block";
+import Video from "@/components/storyblok/video";
 
 export const STORYBLOK_TOKEN = process.env.NEXT_PUBLIC_STORYBLOK_TOKEN;
 
@@ -42,10 +46,14 @@ export const getStoryblokApi = storyblokInit({
     feature: Feature,
     // Extra reusable blocks available for richer pages.
     hero: Hero,
+    heading: Heading,
     text: TextBlock,
     image: ImageBlock,
     button: ButtonBlock,
     columns: Columns,
+    quote: Quote,
+    divider: Divider,
+    video: Video,
     // Blocks that mirror the site's existing pages (transferred from code).
     hero_home: HeroHome,
     post_feed: PostFeed,
